@@ -1,0 +1,8 @@
+.DS_Store
+*.d
+*.o
+bsp2dae
+
+# ignore opencollada build stuff
+.svn
+cmake-make/
