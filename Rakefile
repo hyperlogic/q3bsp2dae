@@ -46,6 +46,7 @@ L_FLAGS = ['-lstdc++',
           ]
 
 OBJECTS = ['src/bsp2dae.o',
+           'src/q3bsp.o',
           ]
 
 DEPS = OBJECTS.map {|f| f[0..-3] + '.d'}
