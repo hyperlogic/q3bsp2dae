@@ -21,13 +21,15 @@ static void _DumpGeometries(Q3BSP* bsp, COLLADASW::StreamWriter* sw)
 
 int main(int argc, const char* argv[])
 {
-    Q3BSP* bsp = Q3BSP_Load(argv[1]);
-
     if (argc != 3)
     {
         printf("Usage: q3bsp2dae q3dm6.bsp q3dm6.dae\n");
         return 1;
     }
+
+    Q3BSP* bsp = Q3BSP_Load(argv[1]);
+    if (!bsp)
+        return 1;
 
     std::string inFile = std::string(argv[1]);
     std::string outFile = std::string(argv[2]);

@@ -1,6 +1,9 @@
 #include "geometryexporter.h"
 #include "q3bsp.h"
 #include "COLLADASWSource.h"
+#include "COLLADASWVertices.h"
+#include "COLLADASWInputList.h"
+#include "COLLADASWPrimitves.h"
 
 GeometryExporter::GeometryExporter(COLLADASW::StreamWriter* sw, Q3BSP* bsp) :
     COLLADASW::LibraryGeometries(sw),
@@ -19,13 +22,25 @@ void GeometryExporter::add()
 {
     openLibrary();
     char tempStr[1024];
-    for (int i = 0; i < /*m_bsp->numSurfaces*/3; i++)
+    for (int i = 0; i < m_bsp->numSurfaces; i++)
     {
+        if (m_bsp->surfaces[i].surfaceType != MST_TRIANGLE_SOUP)
+            continue;
+
+        /*
+        // TODO: REMOVE: for debugging only dump the first few surfaces
+        static int dumpSurfaceCount = 0;
+        dumpSurfaceCount++;
+        if (dumpSurfaceCount > 3)
+            break;
+        */
+
+        // <mesh>
         sprintf(tempStr, "surface%d", i);
         std::string meshId = tempStr;
         openMesh(meshId);
 
-        // positions
+        // positions <source>
         {
             COLLADASW::FloatSourceF fSrc(m_sw);
             fSrc.setId(meshId + POSITIONS_SOURCE_ID_SUFFIX);
@@ -42,7 +57,7 @@ void GeometryExporter::add()
             fSrc.finish();
         }
 
-        // uvs
+        // texcoords <source>
         {
             COLLADASW::FloatSourceF fSrc(m_sw);
             fSrc.setId(meshId + TEXCOORDS_SOURCE_ID_SUFFIX);
@@ -58,7 +73,7 @@ void GeometryExporter::add()
             fSrc.finish();
         }
 
-        // lightmap uvs
+        // lightmap texcoords <source>
         {
             COLLADASW::FloatSourceF fSrc(m_sw);
             fSrc.setId(meshId + TEXCOORDS_SOURCE_ID_SUFFIX + "1");
@@ -74,8 +89,39 @@ void GeometryExporter::add()
             fSrc.finish();
         }
 
-        // TODO: <vertices>
-        // TODO: <triangles>
+        // <vertices>
+        COLLADASW::Vertices vertices(m_sw);
+        vertices.setId(meshId + VERTICES_ID_SUFFIX);
+        // <input semantic="POSITION">
+        COLLADASW::InputList& inputList = vertices.getInputList();
+        inputList.push_back(COLLADASW::Input(COLLADASW::InputSemantic::POSITION,
+                                             COLLADASW::URI(EMPTY_STRING, meshId + POSITIONS_SOURCE_ID_SUFFIX)));
+        vertices.add();
+
+        // <triangles>
+        COLLADASW::Triangles triangles(m_sw);
+        triangles.openPrimitiveElement();
+        triangles.appendMaterial("TODO_Material");
+        triangles.appendCount((uint32_t)m_bsp->surfaces[i].numIndices);
+
+        COLLADASW::InputList& triangleInputList = triangles.getInputList();
+        triangleInputList.push_back(COLLADASW::Input(COLLADASW::InputSemantic::VERTEX,
+                                                     COLLADASW::URI(EMPTY_STRING, meshId + VERTICES_ID_SUFFIX), 0));
+        triangleInputList.push_back(COLLADASW::Input(COLLADASW::InputSemantic::TEXCOORD,
+                                                     COLLADASW::URI(EMPTY_STRING, meshId + TEXCOORDS_SOURCE_ID_SUFFIX), 1));
+        triangleInputList.push_back(COLLADASW::Input(COLLADASW::InputSemantic::TEXCOORD,
+                                                     COLLADASW::URI(EMPTY_STRING, meshId + TEXCOORDS_SOURCE_ID_SUFFIX + "1"), 2));
+        triangles.appendInputList();
+
+        triangles.openPolylistElement();
+        for (int j = m_bsp->surfaces[i].firstIndex; j < m_bsp->surfaces[i].numIndices + m_bsp->surfaces[i].firstIndex; ++j)
+        {
+            int index = m_bsp->indices[j];
+            triangles.appendValues(index); // pos
+            triangles.appendValues(index); // texcoord
+            triangles.appendValues(index); // lightmap texcoord
+        }
+        triangles.finish();
 
         closeGeometry();
     }

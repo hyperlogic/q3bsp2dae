@@ -105,7 +105,7 @@ static void _LoadSurfaces(Q3BSP* bsp, char* buffer, lump_t* lump)
     for (int i = 0; i < count; ++i)
     {
         SL(shaderNum); SL(fogNum); SL(surfaceType); SL(firstVert);
-        SL(numVerts); SL(firstIndex); SL(numIndexes); SL(lightmapNum);
+        SL(numVerts); SL(firstIndex); SL(numIndices); SL(lightmapNum);
         SL(lightmapX); SL(lightmapY); SL(lightmapWidth); SL(lightmapHeight);
         SV3(lightmapOrigin); SV3(lightmapVecs[0]); SV3(lightmapVecs[1]); SV3(lightmapVecs[2]);
         SL(patchWidth); SL(patchHeight);
@@ -117,6 +117,31 @@ static void _LoadSurfaces(Q3BSP* bsp, char* buffer, lump_t* lump)
     bsp->numSurfaces = count;
 
     printf("numSurfaces = %d\n", bsp->numSurfaces);
+    /*
+    // dump surface
+    for (int i = 0; i < count; ++i)
+    {
+        printf("    surface%d =\n", i);
+        printf("        shaderNum = %d\n", bsp->surfaces[i].shaderNum);
+        printf("        fogNum = %d\n", bsp->surfaces[i].fogNum);
+        printf("        surfaceType = %d\n", bsp->surfaces[i].surfaceType);
+        printf("        firstVert = %d\n", bsp->surfaces[i].firstVert);
+        printf("        numVerts = %d\n", bsp->surfaces[i].numVerts);
+        printf("        firstIndex = %d\n", bsp->surfaces[i].firstIndex);
+        printf("        numIndices = %d\n", bsp->surfaces[i].numIndices);
+        printf("        lightmapNum = %d\n", bsp->surfaces[i].lightmapNum);
+        printf("        lightmapX = %d\n", bsp->surfaces[i].lightmapX);
+        printf("        lightmapY = %d\n", bsp->surfaces[i].lightmapY);
+        printf("        lightmapWidth = %d\n", bsp->surfaces[i].lightmapWidth);
+        printf("        lightmapHeight = %d\n", bsp->surfaces[i].lightmapHeight);
+        printf("        lightmapOrigin = (%.5f, %.5f, %.5f)\n", bsp->surfaces[i].lightmapOrigin[0], bsp->surfaces[i].lightmapOrigin[1], bsp->surfaces[i].lightmapOrigin[2]);
+        printf("        lightmapVecs[0] = (%.5f, %.5f, %.5f)\n", bsp->surfaces[i].lightmapVecs[0][0], bsp->surfaces[i].lightmapVecs[0][1], bsp->surfaces[i].lightmapVecs[0][2]);
+        printf("        lightmapVecs[1] = (%.5f, %.5f, %.5f)\n", bsp->surfaces[i].lightmapVecs[1][0], bsp->surfaces[i].lightmapVecs[1][1], bsp->surfaces[i].lightmapVecs[1][2]);
+        printf("        lightmapVecs[2] = (%.5f, %.5f, %.5f)\n", bsp->surfaces[i].lightmapVecs[2][0], bsp->surfaces[i].lightmapVecs[2][1], bsp->surfaces[i].lightmapVecs[2][2]);
+        printf("        patchWidth = %d\n", bsp->surfaces[i].patchWidth);
+        printf("        patchHeight = %d\n", bsp->surfaces[i].patchHeight);
+    }
+    */
 }
 
 static void _LoadVertices(Q3BSP* bsp, char* buffer, lump_t* lump)

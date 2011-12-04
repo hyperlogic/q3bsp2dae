@@ -122,7 +122,7 @@ typedef struct {
 	int32_t numVerts;
 
 	int32_t firstIndex;
-	int32_t numIndexes;
+	int32_t numIndices;
 
 	int32_t lightmapNum;
 	int32_t lightmapX, lightmapY;
