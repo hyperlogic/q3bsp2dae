@@ -143,7 +143,6 @@ typedef struct {
 	char color[4];
 } drawVert_t;
 
-// see renderer/tr_local.h
 struct Q3BSP {
     int32_t numShaders;
     dshader_t* shaders;
