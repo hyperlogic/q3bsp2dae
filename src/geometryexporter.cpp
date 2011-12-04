@@ -20,8 +20,9 @@ GeometryExporter::~GeometryExporter()
 
 void GeometryExporter::add()
 {
-    openLibrary();
     char tempStr[1024];
+
+    openLibrary();
     for (int i = 0; i < m_bsp->numSurfaces; i++)
     {
         if (m_bsp->surfaces[i].surfaceType != MST_TRIANGLE_SOUP)
@@ -101,7 +102,7 @@ void GeometryExporter::add()
         // <triangles>
         COLLADASW::Triangles triangles(m_sw);
         triangles.openPrimitiveElement();
-        triangles.appendMaterial("TODO_Material");
+        triangles.appendMaterial("material");
         triangles.appendCount((uint32_t)m_bsp->surfaces[i].numIndices);
 
         COLLADASW::InputList& triangleInputList = triangles.getInputList();

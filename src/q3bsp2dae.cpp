@@ -2,7 +2,9 @@
 #include "q3bsp.h"
 #include "COLLADASWStreamWriter.h"
 #include "COLLADASWAsset.h"
+#include "COLLADASWScene.h"
 #include "geometryexporter.h"
+#include "sceneexporter.h"
 
 static void _DumpAsset(Q3BSP* bsp, COLLADASW::StreamWriter* sw, const std::string& inFile)
 {
@@ -17,6 +19,15 @@ static void _DumpGeometries(Q3BSP* bsp, COLLADASW::StreamWriter* sw)
 {
     GeometryExporter geometryExporter(sw, bsp);
     geometryExporter.add();
+}
+
+static void _DumpVisualScene(Q3BSP* bsp, COLLADASW::StreamWriter* sw)
+{
+    SceneExporter sceneExporter(sw, bsp);
+    sceneExporter.add();
+
+    COLLADASW::Scene scene(sw, COLLADASW::URI(std::string(""), std::string("root")));
+    scene.add();
 }
 
 int main(int argc, const char* argv[])
@@ -38,6 +49,7 @@ int main(int argc, const char* argv[])
 
     _DumpAsset(bsp, sw, inFile);
     _DumpGeometries(bsp, sw);
+    _DumpVisualScene(bsp, sw);
 
     delete sw;
 

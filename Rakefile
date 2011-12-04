@@ -48,6 +48,7 @@ L_FLAGS = ['-lstdc++',
 OBJECTS = ['src/q3bsp2dae.o',
            'src/q3bsp.o',
            'src/geometryexporter.o',
+           'src/sceneexporter.o',
           ]
 
 DEPS = OBJECTS.map {|f| f[0..-3] + '.d'}
