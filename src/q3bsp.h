@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#define LITTLE_ENDIAN
-
 #if defined(LITTLE_ENDIAN) && defined(BIG_ENDIAN)
 #error "Endianness defined as both big and little"
 #elif defined(BIG_ENDIAN)
@@ -43,7 +41,22 @@ inline int32_t LongSwap(int32_t v)
     return ((int32_t)b[0] << 24) + ((int32_t)b[1] << 16) + ((int32_t)b[2] << 8) + b[3];
 }
 
+typedef union {
+	float f;
+	int i;
+	unsigned int ui;
+} floatint_t;
+
+inline float FloatSwap (const float *f)
+{
+	floatint_t out;
+	out.f = *f;
+	out.ui = LongSwap(out.ui);
+	return out.f;
+}
+
 #define BSP_VERSION 46
+#define BSP_IDENT 0x50534249  // 'IBSP'
 
 typedef struct {
 	int32_t fileofs, filelen;
@@ -60,7 +73,7 @@ typedef struct {
 #define	LUMP_BRUSHES		8
 #define	LUMP_BRUSHSIDES		9
 #define	LUMP_DRAWVERTS		10
-#define	LUMP_DRAWINDEXES	11
+#define	LUMP_DRAWINDICES    11
 #define	LUMP_FOGS			12
 #define	LUMP_SURFACES		13
 #define	LUMP_LIGHTMAPS		14
@@ -72,9 +85,81 @@ typedef struct {
 	int32_t ident;
 	int32_t version;
 
-	lump_t		lumps[HEADER_LUMPS];
+	lump_t lumps[HEADER_LUMPS];
 } dheader_t;
 
-void* Q3BSP_Load(const char* name);
+#define	MAX_QPATH 64
+
+typedef struct {
+	char shader[MAX_QPATH];
+	int surfaceFlags;
+	int contentFlags;
+} dshader_t;
+
+typedef struct {
+    unsigned char* data;  // rbg
+    int width;
+    int height;
+} dlightmap_t;
+
+typedef float vec_t;
+typedef vec_t vec3_t[3];
+
+typedef enum {
+	MST_BAD,
+	MST_PLANAR,
+	MST_PATCH,
+	MST_TRIANGLE_SOUP,
+	MST_FLARE
+} mapSurfaceType_t;
+
+typedef struct {
+	int32_t shaderNum;
+	int32_t fogNum;
+	int32_t surfaceType;
+
+	int32_t firstVert;
+	int32_t numVerts;
+
+	int32_t firstIndex;
+	int32_t numIndexes;
+
+	int32_t lightmapNum;
+	int32_t lightmapX, lightmapY;
+	int32_t lightmapWidth, lightmapHeight;
+
+	vec3_t lightmapOrigin;
+	vec3_t lightmapVecs[3];	// for patches, [0] and [1] are lodbounds
+
+	int32_t patchWidth;
+	int32_t patchHeight;
+} dsurface_t;
+
+typedef struct {
+	vec3_t xyz;
+	float st[2];
+	float lightmap[2];
+	vec3_t normal;
+	char color[4];
+} drawVert_t;
+
+// see renderer/tr_local.h
+struct Q3BSP {
+    int32_t numShaders;
+    dshader_t* shaders;
+    int32_t numLightmaps;
+    dlightmap_t* lightmaps;
+    int32_t numSurfaces;
+    dsurface_t* surfaces;
+    int32_t numVerts;
+    drawVert_t* verts;
+    int32_t numIndices;
+    int32_t* indices;
+};
+
+#define LIGHTMAP_SIZE 128
+
+Q3BSP* Q3BSP_Load(const char* name);
+void Q3BSP_Free(Q3BSP* bsp);
 
 #endif

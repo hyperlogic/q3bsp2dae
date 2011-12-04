@@ -12,7 +12,7 @@ COLLADA_LIBS = ['cmake-make/lib/libGeneratedSaxParser.a',
                ]
 
 # compiler flags
-$C_FLAGS = ['-Wall',
+$C_FLAGS = ['-Wall', '-DLITTLE_ENDIAN',
             "-I#{File.expand_path('src')}",
             "-I#{File.expand_path('abaci/src')}",
             "-I#{File.expand_path('opencollada/COLLADABaseUtils/include')}",

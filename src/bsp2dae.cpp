@@ -3,6 +3,7 @@
 
 int main(int argc, const char* argv[])
 {
-    void* poop = Q3BSP_Load(argv[1]);
+    Q3BSP* bsp = Q3BSP_Load(argv[1]);
+    Q3BSP_Free(bsp);
     return 0;
 }
