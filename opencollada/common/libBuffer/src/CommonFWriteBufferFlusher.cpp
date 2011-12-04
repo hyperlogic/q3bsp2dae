@@ -88,7 +88,7 @@ namespace Common
 #ifdef _WIN32
 		__int64 currentPos = _ftelli64( mStream);
 #else
-		__int64 currentPos = ftello64( mStream);
+		__int64 currentPos = ftello( mStream);
 #endif
 
 		mLastMarkId++;
@@ -109,7 +109,7 @@ namespace Common
 #ifdef _WIN32
 			return (_fseeki64(mStream, 0, SEEK_END) == 0);
 #else
-			return (fseeko64(mStream, 0, SEEK_END) == 0);
+			return (fseeko(mStream, 0, SEEK_END) == 0);
 #endif
 		}
 		else
@@ -125,7 +125,7 @@ namespace Common
 #ifdef _WIN32
 				bool success = (_fseeki64(mStream, pos, SEEK_SET) == 0);
 #else
-				bool success = (fseeko64(mStream, pos, SEEK_SET) == 0);
+				bool success = (fseeko(mStream, pos, SEEK_SET) == 0);
 #endif
 				if ( !keepMarkId )
 				{
