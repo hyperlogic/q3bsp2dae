@@ -3,16 +3,16 @@
 
 #include <stdint.h>
 
-#if defined(LITTLE_ENDIAN) && defined(BIG_ENDIAN)
+#if defined(Q_LITTLE_ENDIAN) && defined(Q_BIG_ENDIAN)
 #error "Endianness defined as both big and little"
-#elif defined(BIG_ENDIAN)
+#elif defined(Q_BIG_ENDIAN)
 #define LittleShort(x) ShortSwap(x)
 #define LittleLong(x) LongSwap(x)
 #define LittleFloat(x) FloatSwap(&x)
 #define BigShort
 #define BigLong
 #define BigFloat
-#elif defined(LITTLE_ENDIAN)
+#elif defined(Q_LITTLE_ENDIAN)
 #define LittleShort
 #define LittleLong
 #define LittleFloat

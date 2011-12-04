@@ -12,7 +12,7 @@ COLLADA_LIBS = ['cmake-make/lib/libGeneratedSaxParser.a',
                ]
 
 # compiler flags
-$C_FLAGS = ['-Wall', '-DLITTLE_ENDIAN',
+$C_FLAGS = ['-Wall', '-DQ_LITTLE_ENDIAN',
             "-I#{File.expand_path('src')}",
             "-I#{File.expand_path('abaci/src')}",
             "-I#{File.expand_path('opencollada/COLLADABaseUtils/include')}",
@@ -47,6 +47,7 @@ L_FLAGS = ['-lstdc++',
 
 OBJECTS = ['src/q3bsp2dae.o',
            'src/q3bsp.o',
+           'src/geometryexporter.o',
           ]
 
 DEPS = OBJECTS.map {|f| f[0..-3] + '.d'}
