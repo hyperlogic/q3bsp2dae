@@ -45,12 +45,12 @@ L_FLAGS = ['-lstdc++',
            `libpng-config --ldflags`.chomp,
           ]
 
-OBJECTS = ['src/bsp2dae.o',
+OBJECTS = ['src/q3bsp2dae.o',
            'src/q3bsp.o',
           ]
 
 DEPS = OBJECTS.map {|f| f[0..-3] + '.d'}
-EXE = 'bsp2dae'
+EXE = 'q3bsp2dae'
 
 # Use the compiler to build makefile rules for us.
 # This will list all of the pre-processor includes this source file depends on.

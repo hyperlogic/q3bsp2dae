@@ -1,7 +1,7 @@
 .DS_Store
 *.d
 *.o
-bsp2dae
+q3bsp2dae
 
 # ignore opencollada build stuff
 .svn
