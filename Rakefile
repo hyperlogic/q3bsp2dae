@@ -49,6 +49,9 @@ OBJECTS = ['src/q3bsp2dae.o',
            'src/q3bsp.o',
            'src/geometryexporter.o',
            'src/sceneexporter.o',
+           'src/materialexporter.o',
+           'src/effectexporter.o',
+           'src/imageexporter.o',
           ]
 
 DEPS = OBJECTS.map {|f| f[0..-3] + '.d'}

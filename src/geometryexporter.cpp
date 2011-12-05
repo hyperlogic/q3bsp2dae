@@ -25,7 +25,7 @@ void GeometryExporter::add()
     openLibrary();
     for (int i = 0; i < m_bsp->numSurfaces; i++)
     {
-        if (m_bsp->surfaces[i].surfaceType != MST_TRIANGLE_SOUP)
+        if (m_bsp->surfaces[i].surfaceType != MST_TRIANGLE_SOUP && m_bsp->surfaces[i].surfaceType != MST_PLANAR)
             continue;
 
         /*

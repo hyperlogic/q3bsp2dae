@@ -40,11 +40,19 @@ void SceneExporter::add()
         node.setType(COLLADASW::Node::NODE);
         node.start();
 
+        node.addScale(0.01, 0.01, 0.01);
+
         COLLADASW::InstanceGeometry instanceGeom(m_sw);
         instanceGeom.setUrl(COLLADASW::URI(EMPTY_STRING, meshId));
         COLLADASW::BindMaterial& bindMat = instanceGeom.getBindMaterial();
         COLLADASW::InstanceMaterialList& instanceMatList = bindMat.getInstanceMaterialList();
-        instanceMatList.push_back(COLLADASW::InstanceMaterial("material", matId));
+        COLLADASW::InstanceMaterial mat("material", COLLADASW::URI(EMPTY_STRING, matId));
+        COLLADASW::BindVertexInput vinput("TEX0", "TEXCOORD", 0);
+        mat.push_back(vinput);
+        instanceMatList.push_back(mat);
+
+        //<bind_vertex_input semantic="TEX0" input_semantic="TEXCOORD" input_set="0"/>
+
         instanceGeom.add();
         node.end();
     }
