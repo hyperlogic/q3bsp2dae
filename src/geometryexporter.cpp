@@ -5,6 +5,9 @@
 #include "COLLADASWInputList.h"
 #include "COLLADASWPrimitves.h"
 
+extern bool g_flipFaces;
+extern bool g_flipTexCoords;
+
 GeometryExporter::GeometryExporter(COLLADASW::StreamWriter* sw, Q3BSP* bsp) :
     COLLADASW::LibraryGeometries(sw),
     m_sw(sw),
@@ -70,7 +73,12 @@ void GeometryExporter::add()
             fSrc.getParameterNameList().push_back("T");
             fSrc.prepareToAppendValues();
             for (int j = m_bsp->surfaces[i].firstVert; j < m_bsp->surfaces[i].numVerts + m_bsp->surfaces[i].firstVert; ++j)
-                fSrc.appendValues(m_bsp->verts[j].st[0], m_bsp->verts[j].st[1]);
+            {
+                float t = m_bsp->verts[j].st[1];
+                if (g_flipTexCoords)
+                    t = 1.0f - m_bsp->verts[j].st[1];
+                fSrc.appendValues(m_bsp->verts[j].st[0], t);
+            }
             fSrc.finish();
         }
 
@@ -86,7 +94,12 @@ void GeometryExporter::add()
             fSrc.getParameterNameList().push_back("T");
             fSrc.prepareToAppendValues();
             for (int j = m_bsp->surfaces[i].firstVert; j < m_bsp->surfaces[i].numVerts + m_bsp->surfaces[i].firstVert; ++j)
-                fSrc.appendValues(m_bsp->verts[j].lightmap[0], m_bsp->verts[j].lightmap[1]);
+            {
+                float t = m_bsp->verts[j].lightmap[1];
+                if (g_flipTexCoords)
+                    t = 1.0f - m_bsp->verts[j].lightmap[1];
+                fSrc.appendValues(m_bsp->verts[j].lightmap[0], t);
+            }
             fSrc.finish();
         }
 
@@ -115,9 +128,15 @@ void GeometryExporter::add()
         triangles.appendInputList();
 
         triangles.openPolylistElement();
-        for (int j = m_bsp->surfaces[i].firstIndex; j < m_bsp->surfaces[i].numIndices + m_bsp->surfaces[i].firstIndex; ++j)
+
+        int start = m_bsp->surfaces[i].firstIndex;
+        int end = m_bsp->surfaces[i].numIndices + m_bsp->surfaces[i].firstIndex;
+        for (int j = start; j < end; ++j)
         {
             int index = m_bsp->indices[j];
+            if (g_flipFaces)
+                index = m_bsp->indices[start + end - j - 1];
+
             triangles.appendValues(index); // pos
             triangles.appendValues(index); // texcoord
             triangles.appendValues(index); // lightmap texcoord

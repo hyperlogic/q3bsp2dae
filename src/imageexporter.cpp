@@ -15,6 +15,17 @@ ImageExporter::~ImageExporter()
     ;
 }
 
+static bool _FileExists(const std::string& filename)
+{
+    FILE* fp = fopen(filename.c_str(), "rb");
+    if (fp)
+    {
+        fclose(fp);
+        return true;
+    }
+    return false;
+}
+
 void ImageExporter::add()
 {
     char tempStr[1024];
@@ -25,9 +36,13 @@ void ImageExporter::add()
         sprintf(tempStr, "image%d", i);
         std::string imageId = tempStr;
 
-        COLLADASW::URI sourceFileUri(COLLADASW::URI::nativePathToUri(m_bsp->shaders[i].shader));
-        sourceFileUri.setScheme(COLLADASW::URI::SCHEME_FILE);
-        COLLADASW::Image image(sourceFileUri, imageId);
+        // Check for existence of .jpg or .tga texture.
+        std::string shader = std::string(m_bsp->shaders[i].shader);
+        std::string imageFile = shader + ".jpg";
+        if (!_FileExists(imageFile))
+            imageFile = shader + ".tga";
+
+        COLLADASW::Image image(imageFile, imageId);
         addImage(image);
     }
     closeLibrary();

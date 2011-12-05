@@ -39,14 +39,15 @@ void EffectExporter::add()
         COLLADASW::EffectProfile effectProfile(m_sw);
         effectProfile.setProfileType(COLLADASW::EffectProfile::COMMON);
 
-        effectProfile.setShaderType(COLLADASW::EffectProfile::CONSTANT);
+        effectProfile.setShaderType(COLLADASW::EffectProfile::LAMBERT);
 
         COLLADASW::Sampler sampler(COLLADASW::Sampler::SAMPLER_TYPE_2D, samplerId, surfaceId);
         sampler.setImageId(imageId);
         COLLADASW::Texture texture(samplerId);
         texture.setSampler(sampler);
         texture.setTexcoord("TEX0");
-
+        effectProfile.setEmission(COLLADASW::ColorOrTexture(COLLADASW::Color(0,0,0,1)));
+        effectProfile.setAmbient(COLLADASW::ColorOrTexture(COLLADASW::Color(0,0,0,1)));
         effectProfile.setDiffuse(COLLADASW::ColorOrTexture(texture));
 
         effectProfile.openProfile();

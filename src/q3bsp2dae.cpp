@@ -9,6 +9,9 @@
 #include "effectexporter.h"
 #include "imageexporter.h"
 
+bool g_flipFaces = true;
+bool g_flipTexCoords = true;
+
 static void _DumpAsset(Q3BSP* bsp, COLLADASW::StreamWriter* sw, const std::string& inFile)
 {
     COLLADASW::Asset asset(sw);
