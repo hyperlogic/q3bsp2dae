@@ -5,9 +5,9 @@ Quake3Arena bsp file to collada converter.
 
 TODO:
 -------
-   * Tessilate patches & output as triangles. (seems safer then outputing bezier patchs, cause the basis funcs are different i think)
    * Dump lightmaps as png files.
    * add lightmaps to dae
+   * add options for tessilation, flip texcoord, face wind order
 
 DONE:
 --------
@@ -17,4 +17,5 @@ DONE:
    * Output library_geometries
    * Output visual_scene nodes
    * Output library_materials and library_effects
+   * Tessilate patches & output as triangles.
 

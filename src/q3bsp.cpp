@@ -232,7 +232,7 @@ Q3BSP* Q3BSP_Load(const char *name)
     // swap the lumps
     for (i = 0; i < (int32_t)sizeof(dheader_t)/4; i++)
     {
-        ((int32_t *)header)[i] = LittleLong ( ((int32_t *)header)[i]);
+        ((int32_t *)header)[i] = LittleLong(((int32_t *)header)[i]);
     }
 
     // alloc the bsp
@@ -244,28 +244,6 @@ Q3BSP* Q3BSP_Load(const char *name)
     _LoadSurfaces(bsp, buffer, &header->lumps[LUMP_SURFACES]);
     _LoadVertices(bsp, buffer, &header->lumps[LUMP_DRAWVERTS]);
     _LoadIndices(bsp, buffer, &header->lumps[LUMP_DRAWINDICES]);
-
-/*
-    // load into heap
-    R_LoadShaders( &header->lumps[LUMP_SHADERS] );
-    R_LoadLightmaps( &header->lumps[LUMP_LIGHTMAPS] );
-    R_LoadPlanes (&header->lumps[LUMP_PLANES]);
-    R_LoadFogs( &header->lumps[LUMP_FOGS], &header->lumps[LUMP_BRUSHES], &header->lumps[LUMP_BRUSHSIDES] );
-    R_LoadSurfaces( &header->lumps[LUMP_SURFACES], &header->lumps[LUMP_DRAWVERTS], &header->lumps[LUMP_DRAWINDEXES] );
-    R_LoadMarksurfaces (&header->lumps[LUMP_LEAFSURFACES]);
-    R_LoadNodesAndLeafs (&header->lumps[LUMP_NODES], &header->lumps[LUMP_LEAFS]);
-    R_LoadSubmodels (&header->lumps[LUMP_MODELS]);
-    R_LoadVisibility( &header->lumps[LUMP_VISIBILITY] );
-    R_LoadEntities( &header->lumps[LUMP_ENTITIES] );
-    R_LoadLightGrid( &header->lumps[LUMP_LIGHTGRID] );
-
-    s_worldData.dataSize = (byte *)ri.Hunk_Alloc(0, h_low) - startMarker;
-
-    // only set tr.world now that we know the entire level has loaded properly
-    tr.world = &s_worldData;
-
-    ri.FS_FreeFile( buffer.v );
-*/
 
     fprintf(stderr, "Q3BSP_Load: success!\n");
     delete [] buffer;

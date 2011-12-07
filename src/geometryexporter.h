@@ -2,8 +2,7 @@
 #define _GEOMETRYEXPORTER_
 
 #include "COLLADASWLibraryGeometries.h"
-
-struct Q3BSP;
+#include "q3bsp.h"
 
 class GeometryExporter : public COLLADASW::LibraryGeometries
 {
@@ -12,6 +11,8 @@ public:
     ~GeometryExporter();
     void add();
 protected:
+    void appendSurface(std::string meshId, const dsurface_t* surface, const drawVert_t* verts, const int32_t* indices);
+    void appendPatch(std::string meshId, const dsurface_t* surface, const drawVert_t* verts, const int32_t* indices);
     COLLADASW::StreamWriter* m_sw;
     Q3BSP* m_bsp;
 };
